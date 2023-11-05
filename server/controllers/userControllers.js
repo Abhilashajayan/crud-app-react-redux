@@ -1,7 +1,8 @@
 const User = require('../models/userSchema');
 const bcrypt = require('bcrypt');
 const user = require('../models/userSchema');
-
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const userReg = async (req, res) => {
     const { name ,password , email } = req.body;
@@ -44,10 +45,16 @@ const userLogin = async (req, res) => {
             if (!user) return res.status(400).json({ error: "User does not exist" });
         }
         const isMatch = await bcrypt.compare(password, users.password);
-
+        const payload = {
+            userId: users._id,
+            username: users.name,
+            };
+            console.log(payload);
+            const secretKey = process.env.SECRET_KEY; 
+            const token = jwt.sign(payload, secretKey, { expiresIn: '5m' }); 
         if (!isMatch) return res.status(400).json({ error: "Invalid credentials! Try again" });
 
-       return res.status(200).json({ user });
+       return res.status(200).json({ users , token });
 
 
     }catch(err){
