@@ -9,7 +9,7 @@ const home = () => {
     <>
        <Navbar />
         <div className='m-20'>
-            <h1 className='text-black text-6xl justify-center flex'>Welcome <span>{user?.name} </span></h1>
+            <h1 className='text-black text-6xl justify-center flex'>Welcome <span className='ml-10'>{user?.name} </span></h1>
         </div>
 
     </>
