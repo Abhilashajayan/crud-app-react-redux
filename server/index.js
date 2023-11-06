@@ -27,6 +27,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/', userRoutes);
+app.use('/admin',adminRoutes)
 connectDB();
 const port = process.env.PORT || 3000;
 
