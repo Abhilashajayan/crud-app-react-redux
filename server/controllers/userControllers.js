@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 const user = require('../models/userSchema');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const cloudinary = require("../services/cloudinary");
+const upload = require("../services/multer");
+
 
 const userReg = async (req, res) => {
     const { name ,password , email } = req.body;
@@ -62,9 +65,38 @@ const userLogin = async (req, res) => {
     }
 }
 
+const editUser = async (req, res) => {
+    const { name, email } = req.body;
+    const imagePath = req.file ? req.file.path : null;
+    const userId = req.params.id;
+  
+    try {
+      let picturePath = null;
+  
+      if (imagePath) {
+        const cloudinaryResponse = await cloudinary.uploader.upload(imagePath);
+        picturePath = cloudinaryResponse.secure_url;
+      }
+      let existingUser = await user.findById(userId);
+
+      const updatedUserData = {
+        name: name != null ? name : existingUser.name,
+        email: email != null ? email : existingUser.email,
+        picturePath: picturePath || existingUser.picturePath, 
+      };
+  
+      const updatedUser = await user.findByIdAndUpdate(userId, updatedUserData, { new: true });
+  
+      return res.status(200).json({ user: updatedUser });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };
 
 
 module.exports = {
     userReg,
-    userLogin
+    userLogin,
+    editUser
 }
