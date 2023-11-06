@@ -18,7 +18,7 @@ const  App = () => {
       <Route path='/profile' element={token ? <Profile /> : <Signin />} />
       <Route path='/' element={token ? <Home /> : <Signin />} />
       <Route path='/admin/login' element={<Login />} />
-      <Route path='/admin/Home' element={<AdminHome />} />
+      <Route path='/admin' element={<AdminHome />} />
     </Routes>
     
     </>
