@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     user: null,
     token: null,
-    allUsers: []
+    allUsers: [],
+    admin : null,
 }
 
 export const authSlice = createSlice({
@@ -24,9 +25,15 @@ export const authSlice = createSlice({
         },
         getUsers: (state, action) => {
             state.allUsers = action.payload.users
+        },
+        authCheck: (state, action) => {
+            state.admin = action.payload.admin;
+        },
+        adminLogout: (state) => {
+        state.admin = null;
         }
     },
 });
 
-export const { setLogin, setLogout, updateProfile, getUsers } = authSlice.actions;
+export const { setLogin, setLogout, updateProfile, getUsers ,authCheck ,adminLogout  } = authSlice.actions;
 export default authSlice.reducer;

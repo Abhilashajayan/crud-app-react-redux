@@ -12,7 +12,8 @@ const Modal = ({ isOpen, onClose }) => {
     const [email, setEmail] = useState(null);
     const [error, setError] = useState(null);
     const [showError, setShowError] = useState(null);
-    console.log(user._id);
+    const [isLoading, setisLoading] = useState(false);
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
@@ -21,8 +22,10 @@ const Modal = ({ isOpen, onClose }) => {
    
 
     const handleSubmit = async (e) => {
+
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         e.preventDefault();
+        setisLoading(true);
         try{
             
             if (email && !emailRegex.test(email) ) {
@@ -42,10 +45,12 @@ const Modal = ({ isOpen, onClose }) => {
                       }
                    
                 }).then(response => {
+                  setisLoading(true)
                     console.log(response.data.user);
                     dispatch(
                         updateProfile(response.data.user)
                       );
+                      setisLoading(false);
                       onClose();
                 }).catch(error => {
                     setError(error.response.data.error);
@@ -58,7 +63,8 @@ const Modal = ({ isOpen, onClose }) => {
             setShowError(true);
             setError('Something went wrong');
         }
-        };
+   
+     };
 
 
     
@@ -72,6 +78,12 @@ const Modal = ({ isOpen, onClose }) => {
           &times;
         </button>
         <h1 className="text-2xl mb-4">Edit User</h1>
+
+                      <img
+                        class="rounded-full w-20 flex ml-20"
+                        src={user?.picturePath}
+                        alt="Avatar"
+                      />
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">Image:</label>
           <input
@@ -105,6 +117,12 @@ const Modal = ({ isOpen, onClose }) => {
                       <span class="font-medium">{error}</span>
                     </div>
                   }
+
+              <p className="block mb-2 text-sm font-medium text-red-600 dark:text-red-600 text-center">
+                  {isLoading ? 'Please Wait... ' : ''}
+                </p>
+
+            
         <button
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 mr-2"
          onClick={handleSubmit}
@@ -114,6 +132,7 @@ const Modal = ({ isOpen, onClose }) => {
         <button className="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400" onClick={onClose}>
           Close
         </button>
+            
       </div>
     </div>
   );

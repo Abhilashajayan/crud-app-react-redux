@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import axios from '../../axios';
 import { useNavigate } from 'react-router-dom';
-
+import { authCheck } from '../../reduxStore/authSlice';
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const[name, setName] = useState(null);
   const[password, setPassword] = useState(null);
   const[error , setError] = useState(null);
   const [showError, setShowError] = useState(false);
+  
 
   const handleSubmit = async (e) => {
     const stringRegex = /^[a-zA-Z0-9_.\s-]{3,}$/
@@ -28,6 +31,11 @@ const Login = () => {
                 name,
                 password,
             }).then(response => {
+                dispatch(
+                    authCheck({
+                    admin: response.data.admin,
+                    })
+                  );
                 navigate('/admin')
             }).catch(error => {
                 setError(error.response.data.error);
