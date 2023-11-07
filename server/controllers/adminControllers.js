@@ -8,7 +8,7 @@ const adminLogin = async (req, res) => {
     
     const admin  = await Admin.findOne({ username : name });
     if (admin.username === name && admin.password === password) {
-      res.status(200).json({ message: 'Login successful' });
+      res.status(200).json({ admin });
     } else {
       console.log('Login failed');
     }
