@@ -10,6 +10,17 @@ const Home = () => {
     const users = useSelector(state => state.auth.allUsers);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    
+
+      const handleDelete = async (userId) => {
+        try {
+          console.log(userId);
+          await axios.delete(`/admin/delete/user/${userId}`);
+          console.log('Item deleted successfully');
+        } catch (error) {
+          console.error('Error deleting item:', error);
+        }
+      };
 
     useEffect(() => {
       axios.get('/admin/getUsers').then(response => {
@@ -53,7 +64,7 @@ const Home = () => {
 
                                 }
                                  {users.map((user) => (
-                                 <tr class="border-b">
+                                 <tr key={user?._id} class="border-b">
                                   <th scope="row" class="text-sm font-normal px-6 py-4 whitespace-nowrap text-left">
                                  <div class="flex flex-row items-center">
                                <img
@@ -78,7 +89,7 @@ const Home = () => {
                   </td>
                   <td class="align-middle text-gray-500 text-sm font-normal px-6 py-4 whitespace-nowrap text-left">User</td>
                   <td class="align-middle text-right text-sm font-normal px-6 py-4 whitespace-nowrap text-left">
-                    <a href="#!" class="font-medium text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 transition duration-300 ease-in-out">Edit</a>
+                    <a href="#!" onClick={() => handleDelete(user?._id)} class="font-medium text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 transition duration-300 ease-in-out">Delete</a>
                   </td>
                 </tr>
                 ))}
