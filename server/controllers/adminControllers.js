@@ -35,7 +35,6 @@ const userDelete = async (req, res) => {
   const userId = req.params.userId;
   try{
     const user = await User.findByIdAndDelete(userId);
-    console.log(user);
     res.status(200).json({ message: 'User deleted successfully'});
   }catch (err) {
     console.log(err);
