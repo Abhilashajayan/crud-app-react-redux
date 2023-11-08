@@ -5,13 +5,16 @@ import { useDispatch } from "react-redux";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { adminLogout } from '../../reduxStore/authSlice';
+import Modal from './editUser';
 
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
     let users = useSelector(state => state.auth.allUsers) ;
+    const [dataId, setDataId] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
 
     const handleSearch = (event) => {
@@ -58,7 +61,7 @@ const Home = () => {
  
   return (
   <>
-<nav class="bg-white border-gray-200 dark:bg-gray-500">
+<nav class="">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
   <a class="flex items-center">
       <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Admin</span>
@@ -113,7 +116,7 @@ const Home = () => {
 
                                 }
                                  {users.map((user) => (
-                                 <tr key={user?._id} class="border-b">
+                                 <tr key={user?._id}  class="border-b">
                                   <th scope="row" class="text-sm font-normal px-6 py-4 whitespace-nowrap text-left">
                                  <div class="flex flex-row items-center">
                                <img
@@ -137,7 +140,7 @@ const Home = () => {
                     <span class="text-xs py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-medium bg-green-200 text-green-600 rounded-full">User</span>
                   </td>
                   <td class="align-middle text-gray-500 text-sm font-normal px-6 py-4 whitespace-nowrap text-left">
-                  <a href="#!" class="font-medium text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 transition duration-300 ease-in-out">Edit</a>
+                  <a href="#!"    onClick={() => {setIsModalOpen(true); setDataId(user._id);}} class="font-medium text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 transition duration-300 ease-in-out">Edit</a>
                   </td>
                   <td class="align-middle text-right text-sm font-normal px-6 py-4 whitespace-nowrap text-left">
                     <a href="#!" onClick={() => handleDelete(user?._id)} class="font-medium text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 transition duration-300 ease-in-out">Delete</a>
@@ -153,6 +156,8 @@ const Home = () => {
       </div>
     </div>
   </div>
+
+  <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}  dataId={dataId} />
   
 </section>
 
