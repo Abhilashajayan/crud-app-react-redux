@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux'; 
+import { useSelector, useDispatch } from 'react-redux'; 
 import axios from '../../axios';
+import { useNavigate } from 'react-router-dom';
+import { userEdit } from '../../reduxStore/authSlice.js'
 
 
 const Modal = ({ isOpen, onClose, dataId }) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [image, setImage] = useState('');
@@ -15,9 +19,7 @@ const Modal = ({ isOpen, onClose, dataId }) => {
     let selectedUser;
   console.log(dataId);
 
-  const handleSave = () => {
-    onClose();
-  };
+  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -57,16 +59,16 @@ const Modal = ({ isOpen, onClose, dataId }) => {
                
             }).then(response => {
               setisLoading(true)
-                console.log(response.data.user);
+                console.log(response.data);
                 dispatch(
-                    updateProfile(response.data.user)
+                  userEdit(response.data.user),
                   );
                   setisLoading(false);
                   onClose();
+                  
             }).catch(error => {
                 setError(error.response.data.error);
                 setShowError(true);
-                onClose();
             })
         }
     } catch (err) {

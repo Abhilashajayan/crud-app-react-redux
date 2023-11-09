@@ -29,8 +29,13 @@ const Home = () => {
 
       const handleDelete = async (userId) => {
         try {
-          console.log(userId);
+          
           await axios.delete(`/admin/delete/user/${userId}`);
+          dispatch(
+            getUsers({
+                users: users.filter(user => user._id !== userId)
+            })
+        );
           console.log('Item deleted successfully');
         } catch (error) {
           console.error('Error deleting item:', error);

@@ -31,9 +31,15 @@ export const authSlice = createSlice({
         },
         adminLogout: (state) => {
         state.admin = null;
-        }
+        },
+        userEdit: (state, action) => {
+            const updatedUser = action.payload;
+            state.allUsers = state.allUsers.map(user =>
+              user._id === updatedUser._id ? updatedUser : user
+            );
+          },
     },
 });
 
-export const { setLogin, setLogout, updateProfile, getUsers ,authCheck ,adminLogout  } = authSlice.actions;
+export const { setLogin, setLogout, updateProfile, getUsers ,authCheck ,adminLogout,userEdit  } = authSlice.actions;
 export default authSlice.reducer;
